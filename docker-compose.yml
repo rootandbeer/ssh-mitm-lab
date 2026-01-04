@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  ssh-server:
+    image: ubuntu:22.04
+    container_name: ssh-server
+    hostname: ssh-server
+    networks:
+      mitm_network:
+        ipv4_address: 172.25.0.10
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y openssh-server sudo &&
+        mkdir -p /var/run/sshd &&
+        useradd -m -s /bin/bash targetuser &&
+        echo 'targetuser:supersecret' | chpasswd &&
+        useradd -m -s /bin/bash admin &&
+        echo 'admin:P@ssw0rd123' | chpasswd &&
+        usermod -aG sudo admin &&
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
+        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config &&
+        echo 'Banner /etc/ssh/banner' >> /etc/ssh/sshd_config &&
+        echo '================================================' > /etc/ssh/banner &&
+        echo '  SECURE CORPORATE SSH SERVER - AUTHORIZED ONLY' >> /etc/ssh/banner &&
+        echo '================================================' >> /etc/ssh/banner &&
+        /usr/sbin/sshd -D
+      "
+    tty: true
+    stdin_open: true
+
+  victim-client:
+    image: ubuntu:22.04
+    container_name: victim-client
+    hostname: victim
+    networks:
+      mitm_network:
+        ipv4_address: 172.25.0.20
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y openssh-client iputils-ping net-tools iproute2 curl nano vim &&
+        echo '#!/bin/bash' > /usr/local/bin/connect-to-server &&
+        echo 'echo \"[INFO] Connecting to SSH server at 172.25.0.10...\"' >> /usr/local/bin/connect-to-server &&
+        echo 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null targetuser@172.25.0.10' >> /usr/local/bin/connect-to-server &&
+        chmod +x /usr/local/bin/connect-to-server &&
+        tail -f /dev/null
+      "
+    tty: true
+    stdin_open: true
+    depends_on:
+      - ssh-server
+
+networks:
+  mitm_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/24
+          gateway: 172.25.0.1
+

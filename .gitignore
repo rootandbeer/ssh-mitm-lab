@@ -1,0 +1,56 @@
+# SSH MITM Lab - Git Ignore
+
+# Logs directory
+logs/
+*.log
+
+# Packet captures
+*.pcap
+*.pcapng
+
+# SSH keys and certificates
+*.key
+*.pem
+*.crt
+*.pub
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Docker
+.docker/
+
+# SSH MITM specific
+.ssh-mitm/
+session_*.json
+
+RED_TEAM_CHEATSHEET.md
+MANUAL_SETUP.md
