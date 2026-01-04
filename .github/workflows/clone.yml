@@ -5,10 +5,6 @@ on:
     - cron: "0 */24 * * *"
   workflow_dispatch:
 
-
-permissions:
-  contents: write   # 👈 REQUIRED for pushing commits
-
 jobs:
   build:
     runs-on: ubuntu-latest
