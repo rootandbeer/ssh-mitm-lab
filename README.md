@@ -5,12 +5,13 @@
 
 ## Introduction
 
-| Repo |⭐ Please give a [Star](http://www.github.com/rootandbeer/ssh-mitm) if you enjoyed this lab ⭐ |
+| Repo |⭐ Please give a [Star](http://www.github.com/rootandbeer/ssh-mitm-lab) if you enjoyed this lab ⭐ |
 | --- | --- |
-| Downloads | [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/rootandbeer/YOUR_GIST_ID/raw/clone.json&logo=github)](https://github.com/MShawon/github-clone-count-badge) |
-| Stars | [![GitHub stars](https://badgen.net/github/stars/rootandbeer/ssh-mitm)](https://GitHub.com/rootandbeer/ssh-mitm/stargazers/) |
-| Prerequisites | [Docker](https://docs.docker.com/engine/install/), [SSH-MITM](https://github.com/ssh-mitm/ssh-mitm), [arpspoof](https://www.kali.org/tools/dsniff/) |
+| Downloads | [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/rootandbeer/b7ba3d389cc20606bb343135cbe3b7e7/raw/clone.json&logo=github)](https://github.com/MShawon/github-clone-count-badge) |
+| Stars | ![GitHub Repo stars](https://img.shields.io/github/stars/rootandbeer/ssh-mitm-lab) |
+| Prerequisites | [Docker-ce](https://www.kali.org/docs/containers/installing-docker-on-kali/), [SSH-MITM](https://github.com/ssh-mitm/ssh-mitm), [arpspoof](https://www.kali.org/tools/dsniff/) |
 | Difficulty | ![Static Badge](https://img.shields.io/badge/medium-orange) |
+
 
 This lab demonstrates how to perform a Man-in-the-Middle (MITM) attack on SSH connections using ARP spoofing and SSH-MITM. You will learn to intercept SSH traffic between a client and server, redirecting it through a proxy to capture credentials and monitor sessions in real-time. The lab uses Docker containers to create a controlled network environment for ethical security testing.
 
